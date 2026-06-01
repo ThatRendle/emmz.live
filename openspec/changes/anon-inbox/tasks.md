@@ -1,11 +1,11 @@
 ## 1. Project Scaffold
 
-- [ ] 1.1 Create ASP.NET Core 10 Razor Pages solution (`dotnet new webapp`)
-- [ ] 1.2 Add NuGet packages: `Npgsql.EntityFrameworkCore.PostgreSQL`, `QRCoder`, `Resend`
-- [ ] 1.3 Add HTMX via CDN script tag in `_Layout.cshtml`
-- [ ] 1.4 Create `Dockerfile` (multi-stage: build + runtime on `mcr.microsoft.com/dotnet/aspnet:10.0`)
-- [ ] 1.5 Create `docker-compose.yml` with app + postgres services for local development
-- [ ] 1.6 Create `.env.example` documenting all required env vars (`OWNER_NAME`, `OWNER_EMAIL`, `INBOXES`, `RESEND_API_KEY`, `DATABASE_URL`, `SESSION_SECRET`)
+- [x] 1.1 Create ASP.NET Core 10 Razor Pages solution (`dotnet new webapp`)
+- [x] 1.2 Add NuGet packages: `Npgsql.EntityFrameworkCore.PostgreSQL`, `QRCoder`, `Resend`
+- [x] 1.3 Add HTMX via CDN script tag in `_Layout.cshtml`
+- [x] 1.4 Create `Dockerfile` (multi-stage: build + runtime on `mcr.microsoft.com/dotnet/aspnet:10.0`)
+- [x] 1.5 Create `docker-compose.yml` with app + postgres services for local development
+- [x] 1.6 Create `.env.example` documenting all required env vars (`OWNER_NAME`, `OWNER_EMAIL`, `INBOXES`, `RESEND_API_KEY`, `DATABASE_URL`, `SESSION_SECRET`)
 
 ## 2. Data Model & Database
 

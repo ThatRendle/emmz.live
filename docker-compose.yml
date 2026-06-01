@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=Host=db;Database=emmzlive;Username=emmzlive;Password=emmzlive
+      - INBOXES=${INBOXES:-cph/hitc,cph/rtbc}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - OWNER_NAME=${OWNER_NAME}
+      - OWNER_EMAIL=${OWNER_EMAIL}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: emmzlive
+      POSTGRES_USER: emmzlive
+      POSTGRES_PASSWORD: emmzlive
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U emmzlive -d emmzlive"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
