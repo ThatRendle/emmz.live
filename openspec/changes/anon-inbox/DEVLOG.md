@@ -55,6 +55,33 @@ decisions made under uncertainty, deviations, and human-in-the-loop verification
   - **HITL pending — real email delivery:** cannot be tested automatically. Verify with real
     `RESEND_API_KEY` + verified `MAIL_FROM`: run the app, visit `/auth/request`, click send, confirm
     the email arrives at `OWNER_EMAIL` within 15 min and the verify link signs in + sets the cookie.
-- **6. Inbox Viewer Page** — not started.
+- **6. Inbox Viewer Page** — done (pending commit). `[Authorize(scheme anon-inbox-session)]` +
+  `[ServiceFilter(ValidInboxFilter)]` on the page model cover both `OnGetAsync` and the
+  `OnGetListAsync` poll handler — this closes 5.5's redirect end-to-end.
+  - **XSS (highest-risk surface — audited clean):** anonymous Body/SenderName emitted only via
+    auto-encoded Razor; click-to-detail JS carries body/name in Razor-encoded `data-*` attrs and
+    writes the detail panel via `textContent` only (never `innerHTML`); newlines via CSS
+    `white-space: pre-wrap`. Reviewer traced `<img onerror>`, `</script>`, `${}`/`{{}}` payloads
+    through list/detail/post-swap — all inert.
+  - Messages loaded by canonical slug (Items), ordered `ReceivedAt` ascending in both handlers;
+    missing inbox row → empty, no 500. Selection preserved across the 5s swap via `htmx:afterSwap`
+    re-select by id + event delegation. Keyboard ArrowUp/Down with boundary clamps.
+  - **Count staleness fix:** count badge updated on each poll via `hx-swap-oob` span emitted ONLY
+    in the `OnGetListAsync` response (gated by `ViewData["IncludeOobCount"]`) — initial inline
+    render keeps a single shell `id="msg-count"` (avoided a duplicate-id / stray-span bug).
+  - HITL pending (needs a running app + browser/projector): unauthenticated→/auth/request redirect,
+    click + ArrowUp/Down nav, 5s auto-refresh visual, projector legibility.
 - **7. Deployment** — not started (includes HITL: docker build, QR phone scan, projector legibility,
   real magic-link email).
+
+## Consolidated human-in-the-loop verification (to run before archive)
+
+All require a running app (`docker-compose up` with env vars set). To present to the user as one pass:
+1. **Docker build/run** (7.1): `docker-compose up` builds and serves.
+2. **Submission + QR** (4.x): visit `/cph/hitc`, submit a message; scan the QR with a phone → resolves
+   to the same URL.
+3. **Magic-link email** (5.2): `/auth/request` → real email arrives via Resend within 15 min; link
+   signs in + sets cookie; expired/tampered link rejected.
+4. **Auth redirect** (5.5/6.2): unauthenticated `/cph/hitc/inbox` → redirects to `/auth/request`.
+5. **Inbox UX** (6.x): two-panel layout; click + ArrowUp/Down navigation; new submission appears
+   within ~5s without reload and selection is preserved; count updates; legible on a projector.

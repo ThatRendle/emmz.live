@@ -44,18 +44,18 @@
 
 ## 6. Inbox Viewer Page
 
-- [ ] 6.1 Create `Pages/Inbox.cshtml` + `Inbox.cshtml.cs` with route `/{conf}/{talk}/inbox`
-- [ ] 6.2 Apply auth filter and `ValidInboxFilter` to the page
-- [ ] 6.3 Implement `OnGetAsync`: load all messages for the inbox ordered by `ReceivedAt` ascending, pass to view
-- [ ] 6.4 Create partial `Pages/Shared/_MessageList.cshtml` for the left panel (used by HTMX refresh)
-- [ ] 6.5 Implement HTMX partial endpoint `OnGetListAsync` returning only the `_MessageList` partial (for auto-refresh)
-- [ ] 6.6 Render two-panel layout: left panel with `_MessageList`, right panel with selected message detail
-- [ ] 6.7 Add HTMX attributes on list panel: `hx-get="?handler=List"`, `hx-trigger="every 5s"`, `hx-swap="innerHTML"`
-- [ ] 6.8 Add click handler on list items to update detail panel via JS (or HTMX `hx-target`)
-- [ ] 6.9 Add inline `<script>` for ArrowUp/ArrowDown keyboard navigation between messages
-- [ ] 6.10 Display total message count in the UI
-- [ ] 6.11 Apply projector-friendly CSS: large detail panel text (min 2rem), high contrast, readable from distance
-- [ ] 6.12 Style message list items with subtle sender-name label above preview text
+- [x] 6.1 Create `Pages/Inbox.cshtml` + `Inbox.cshtml.cs` with route `/{conf}/{talk}/inbox`
+- [x] 6.2 Apply auth filter and `ValidInboxFilter` to the page
+- [x] 6.3 Implement `OnGetAsync`: load all messages for the inbox ordered by `ReceivedAt` ascending, pass to view
+- [x] 6.4 Create partial `Pages/Shared/_MessageList.cshtml` for the left panel (used by HTMX refresh)
+- [x] 6.5 Implement HTMX partial endpoint `OnGetListAsync` returning only the `_MessageList` partial (for auto-refresh)
+- [x] 6.6 Render two-panel layout: left panel with `_MessageList`, right panel with selected message detail
+- [x] 6.7 Add HTMX attributes on list panel: `hx-get="?handler=List"`, `hx-trigger="every 5s"`, `hx-swap="innerHTML"`
+- [x] 6.8 Add click handler on list items to update detail panel via JS (or HTMX `hx-target`)
+- [x] 6.9 Add inline `<script>` for ArrowUp/ArrowDown keyboard navigation between messages
+- [x] 6.10 Display total message count in the UI
+- [x] 6.11 Apply projector-friendly CSS: large detail panel text (min 2rem), high contrast, readable from distance
+- [x] 6.12 Style message list items with subtle sender-name label above preview text
 
 ## 7. Deployment
 

@@ -1,0 +1,31 @@
+@model EmmzLive.Pages.InboxModel
+@* Partial used by both the initial render and the HTMX 5s refresh. *@
+@if (!Model.Messages.Any())
+{
+    <p class="empty-state">No messages yet. Share the link and check back soon.</p>
+}
+else
+{
+    @foreach (var message in Model.Messages)
+    {
+        <button type="button"
+                class="msg-item"
+                data-msg-id="@message.Id"
+                data-msg-body="@message.Body"
+                data-msg-sender="@(message.SenderName ?? string.Empty)"
+                aria-label="@(message.SenderName != null ? $"Message from {message.SenderName}" : "Anonymous message")">
+            @if (message.SenderName is not null)
+            {
+                <span class="msg-sender">@message.SenderName</span>
+            }
+            <span class="msg-preview">@MessagePreview.Truncate(message.Body)</span>
+        </button>
+    }
+}
+@* OOB swap keeps the count badge in the page header current after each HTMX poll.
+   Only emitted in poll responses (IncludeOobCount=true); never on initial inline render
+   to avoid a duplicate id="msg-count" and a stray visible span on first paint. *@
+@if (ViewData["IncludeOobCount"] is true)
+{
+    <span id="msg-count" hx-swap-oob="true">@Model.TotalCount</span>
+}
