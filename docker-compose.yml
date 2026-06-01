@@ -9,6 +9,7 @@ services:
       - DATABASE_URL=Host=db;Database=emmzlive;Username=emmzlive;Password=emmzlive
       - INBOXES=${INBOXES:-cph/hitc,cph/rtbc}
       - RESEND_API_KEY=${RESEND_API_KEY}
+      - MAIL_FROM=${MAIL_FROM}
       - SESSION_SECRET=${SESSION_SECRET}
       - OWNER_NAME=${OWNER_NAME}
       - OWNER_EMAIL=${OWNER_EMAIL}

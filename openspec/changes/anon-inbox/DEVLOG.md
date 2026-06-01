@@ -71,8 +71,24 @@ decisions made under uncertainty, deviations, and human-in-the-loop verification
     render keeps a single shell `id="msg-count"` (avoided a duplicate-id / stray-span bug).
   - HITL pending (needs a running app + browser/projector): unauthenticated→/auth/request redirect,
     click + ArrowUp/Down nav, 5s auto-refresh visual, projector legibility.
-- **7. Deployment** — not started (includes HITL: docker build, QR phone scan, projector legibility,
-  real magic-link email).
+- **7. Deployment** — 7.2 + 7.3 done; **7.1 pending HITL** (pending commit).
+  - `railway.json` (DOCKERFILE builder, numReplicas 1, ON_FAILURE restart max 5). `README.md` with
+    env-var table + local/Railway instructions. `.dockerignore` added (fixed a real `docker build`
+    NETSDK1064 from host `obj/` polluting the in-container restore).
+  - **PORT:** `Program.cs` binds `PORT` (Railway-injected) via `int.TryParse` else 8080; Dockerfile
+    `ASPNETCORE_URLS` ENV removed (UseUrls authoritative); local compose serves 8080.
+  - **OWNER_NAME wired (was unused):** the proposal lists it but no code read it. Now used as an
+    optional greeting in the magic-link email (`BuildHtmlBody`, HtmlEncoded), graceful fallback when
+    unset; documented Optional in README/.env.example. (Orchestrator call: treated as optional/cosmetic
+    rather than fail-fast.)
+  - **Bug found during verification:** `docker-compose.yml` omitted `MAIL_FROM` (a section-5 fail-fast
+    var) → the app container would exit on `docker-compose up`. Fixed (added `MAIL_FROM=${MAIL_FROM}`);
+    all six startup-required vars now wired in compose.
+  - **7.1 status:** `docker build` succeeds (worker-verified). Full `docker-compose up` end-to-end
+    could NOT be run by the orchestrator — this sandbox blocks Docker registry image pulls
+    (`postgres:17` pull canceled by the credential helper). 7.1 left **unticked** pending the user
+    running `docker-compose up` on their machine and confirming the app boots/migrates/serves. See
+    the consolidated HITL section below.
 
 ## Consolidated human-in-the-loop verification (to run before archive)
 

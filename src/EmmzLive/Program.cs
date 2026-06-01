@@ -10,6 +10,13 @@ using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Railway injects PORT; fall back to 8080 for local docker-compose and development.
+// Parse defensively: an empty or non-numeric PORT value falls back to 8080.
+var port = int.TryParse(Environment.GetEnvironmentVariable("PORT"), out var parsedPort) && parsedPort > 0
+    ? parsedPort
+    : 8080;
+builder.WebHost.UseUrls($"http://+:{port}");
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
