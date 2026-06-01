@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/EmmzLive/EmmzLive.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EmmzLive.Tests/EmmzLive.Tests.csproj" />
+  </Folder>
 </Solution>

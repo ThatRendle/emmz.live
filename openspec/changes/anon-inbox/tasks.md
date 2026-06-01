@@ -9,11 +9,11 @@
 
 ## 2. Data Model & Database
 
-- [ ] 2.1 Create `Inbox` entity with `Id` (GUID), `Slug` (string, unique), `CreatedAt`
-- [ ] 2.2 Create `Message` entity with `Id` (GUID), `InboxId` (FK), `SenderName` (nullable string), `Body` (string), `ReceivedAt`
-- [ ] 2.3 Create `AppDbContext` with both entities registered
-- [ ] 2.4 Add EF Core migration for initial schema
-- [ ] 2.5 Wire `Database.MigrateAsync()` in `Program.cs` to auto-migrate on startup
+- [x] 2.1 Create `Inbox` entity with `Id` (GUID), `Slug` (string, unique), `CreatedAt`
+- [x] 2.2 Create `Message` entity with `Id` (GUID), `InboxId` (FK), `SenderName` (nullable string), `Body` (string), `ReceivedAt`
+- [x] 2.3 Create `AppDbContext` with both entities registered
+- [x] 2.4 Add EF Core migration for initial schema
+- [x] 2.5 Wire `Database.MigrateAsync()` in `Program.cs` to auto-migrate on startup
 
 ## 3. Inbox Configuration
 
