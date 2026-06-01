@@ -17,10 +17,10 @@
 
 ## 3. Inbox Configuration
 
-- [ ] 3.1 Create `InboxConfig` class that reads and parses `INBOXES` env var on startup; throw if missing/empty
-- [ ] 3.2 Register `InboxConfig` as a singleton in DI
-- [ ] 3.3 Log configured slugs at Information level in `Program.cs`
-- [ ] 3.4 Create `ValidInboxFilter` action filter that returns 404 for unrecognised `{conf}/{talk}` combinations
+- [x] 3.1 Create `InboxConfig` class that reads and parses `INBOXES` env var on startup; throw if missing/empty
+- [x] 3.2 Register `InboxConfig` as a singleton in DI
+- [x] 3.3 Log configured slugs at Information level in `Program.cs`
+- [x] 3.4 Create `ValidInboxFilter` action filter that returns 404 for unrecognised `{conf}/{talk}` combinations
 
 ## 4. Message Submission Page
 
