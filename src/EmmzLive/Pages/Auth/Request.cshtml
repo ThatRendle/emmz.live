@@ -1,0 +1,23 @@
+@page
+@model EmmzLive.Pages.Auth.RequestModel
+@{
+    ViewData["Title"] = "Sign In";
+}
+
+<h1>Sign In</h1>
+
+@if (Model.EmailSent)
+{
+    <p>A sign-in link has been sent. Check your email and click the link within 15 minutes.</p>
+}
+else
+{
+    @if (Model.SendFailed)
+    {
+        <p>Sorry, we couldn't send the sign-in link right now. Please try again.</p>
+    }
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit">Send sign-in link</button>
+    </form>
+}

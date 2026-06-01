@@ -35,12 +35,12 @@
 
 ## 5. Magic Link Authentication
 
-- [ ] 5.1 Create `Pages/Auth/Request.cshtml` + `Request.cshtml.cs`
-- [ ] 5.2 Implement `OnPostAsync`: generate HMAC-SHA256 token (payload: email + expiry timestamp, key: `SESSION_SECRET`), send magic link email via Resend SDK, show confirmation
-- [ ] 5.3 Create `Pages/Auth/Verify.cshtml.cs` (page-less handler) at route `/auth/verify`
-- [ ] 5.4 Implement `OnGetAsync` on Verify: validate token signature and expiry; on success set `anon-inbox-session` cookie (`HttpOnly`, `Secure`, `SameSite=Strict`); redirect to `/`; on failure return error page
-- [ ] 5.5 Create `AuthFilter` (or use ASP.NET Core cookie auth middleware) to protect inbox pages; redirect to `/auth/request` if no valid cookie
-- [ ] 5.6 Configure cookie authentication in `Program.cs` with scheme `anon-inbox-session`
+- [x] 5.1 Create `Pages/Auth/Request.cshtml` + `Request.cshtml.cs`
+- [x] 5.2 Implement `OnPostAsync`: generate HMAC-SHA256 token (payload: email + expiry timestamp, key: `SESSION_SECRET`), send magic link email via Resend SDK, show confirmation
+- [x] 5.3 Create `Pages/Auth/Verify.cshtml.cs` (page-less handler) at route `/auth/verify`
+- [x] 5.4 Implement `OnGetAsync` on Verify: validate token signature and expiry; on success set `anon-inbox-session` cookie (`HttpOnly`, `Secure`, `SameSite=Strict`); redirect to `/`; on failure return error page
+- [x] 5.5 Create `AuthFilter` (or use ASP.NET Core cookie auth middleware) to protect inbox pages; redirect to `/auth/request` if no valid cookie
+- [x] 5.6 Configure cookie authentication in `Program.cs` with scheme `anon-inbox-session`
 
 ## 6. Inbox Viewer Page
 

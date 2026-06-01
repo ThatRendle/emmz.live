@@ -1,9 +1,12 @@
+using EmmzLive.Auth;
 using EmmzLive.Configuration;
 using EmmzLive.Data;
 using EmmzLive.Filters;
 using EmmzLive.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Resend;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,43 @@ var databaseUrl = builder.Configuration["DATABASE_URL"]
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(ConnectionStringHelper.ToNpgsqlConnectionString(databaseUrl)));
+
+// Fail fast for required auth configuration.
+var sessionSecret = builder.Configuration["SESSION_SECRET"]
+    ?? throw new InvalidOperationException("SESSION_SECRET is not configured. Generate one with: openssl rand -base64 32");
+
+var ownerEmail = builder.Configuration["OWNER_EMAIL"]
+    ?? throw new InvalidOperationException("OWNER_EMAIL is not configured.");
+
+_ = builder.Configuration["MAIL_FROM"]
+    ?? throw new InvalidOperationException(
+        "MAIL_FROM is not configured. Set it to a Resend-verified sender address, e.g. 'emmz.live <noreply@emmz.live>'.");
+
+// Magic-link token service — singleton because the key bytes are derived once.
+builder.Services.AddSingleton(new MagicLinkTokenService(sessionSecret, ownerEmail));
+
+// Resend email client.
+builder.Services.AddResend(options =>
+{
+    options.ApiToken = builder.Configuration["RESEND_API_KEY"]
+        ?? throw new InvalidOperationException("RESEND_API_KEY is not configured.");
+});
+
+builder.Services.AddTransient<IMagicLinkEmailSender, ResendMagicLinkEmailSender>();
+
+// Cookie authentication — scheme and cookie both named "anon-inbox-session".
+// Session cookie only (IsPersistent = false in SignInAsync); no expiry set here.
+builder.Services.AddAuthentication("anon-inbox-session")
+    .AddCookie("anon-inbox-session", options =>
+    {
+        options.Cookie.Name = "anon-inbox-session";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.LoginPath = "/auth/request";
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -55,6 +95,8 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+// Authentication and authorisation after routing, before endpoints.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
