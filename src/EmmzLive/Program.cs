@@ -2,6 +2,7 @@ using EmmzLive.Configuration;
 using EmmzLive.Data;
 using EmmzLive.Filters;
 using EmmzLive.Infrastructure;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,17 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+
+// Must be first: honour X-Forwarded-Proto/For from Railway's TLS-terminating proxy.
+// KnownNetworks/KnownProxies are cleared so the proxy's forwarded headers are always trusted
+// regardless of its IP address (Railway assigns dynamic proxy IPs).
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+    KnownIPNetworks = { },
+    KnownProxies = { },
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

@@ -24,14 +24,14 @@
 
 ## 4. Message Submission Page
 
-- [ ] 4.1 Create `Pages/Submit.cshtml` + `Submit.cshtml.cs` with route `/{conf}/{talk}`
-- [ ] 4.2 Apply `ValidInboxFilter` to the page
-- [ ] 4.3 Implement `OnGetAsync`: resolve or create Inbox record, generate QR code (base64 PNG via QRCoder), pass to view
-- [ ] 4.4 Implement `OnPostAsync`: validate message body (required), save Message to DB, return page with confirmation flag
-- [ ] 4.5 Render form with optional Name input, required Message textarea, and submit button
-- [ ] 4.6 Render QR code as inline `<img src="data:image/png;base64,...">` below the form
-- [ ] 4.7 Show confirmation message on successful submission; clear form fields
-- [ ] 4.8 Apply minimal, mobile-friendly CSS to submission page
+- [x] 4.1 Create `Pages/Submit.cshtml` + `Submit.cshtml.cs` with route `/{conf}/{talk}`
+- [x] 4.2 Apply `ValidInboxFilter` to the page
+- [x] 4.3 Implement `OnGetAsync`: resolve or create Inbox record, generate QR code (base64 PNG via QRCoder), pass to view
+- [x] 4.4 Implement `OnPostAsync`: validate message body (required), save Message to DB, return page with confirmation flag
+- [x] 4.5 Render form with optional Name input, required Message textarea, and submit button
+- [x] 4.6 Render QR code as inline `<img src="data:image/png;base64,...">` below the form
+- [x] 4.7 Show confirmation message on successful submission; clear form fields
+- [x] 4.8 Apply minimal, mobile-friendly CSS to submission page
 
 ## 5. Magic Link Authentication
 
