@@ -1,0 +1,284 @@
+@page "/{conf}/{talk}/inbox"
+@model InboxModel
+@{
+    ViewData["Title"] = "Inbox";
+}
+
+<div class="inbox-layout">
+    <aside class="msg-list-panel">
+        <div class="panel-header">
+            <h1>Messages</h1>
+            <span class="msg-count" id="msg-count" aria-live="polite">@Model.TotalCount</span>
+        </div>
+        <div id="msg-list"
+             hx-get="?handler=List"
+             hx-trigger="every 5s"
+             hx-swap="innerHTML">
+            <partial name="_MessageList" model="Model" />
+        </div>
+    </aside>
+
+    <main class="msg-detail-panel" id="msg-detail" aria-live="polite">
+        <div class="detail-placeholder" id="detail-placeholder">
+            <p>Select a message to read it.</p>
+        </div>
+        <div class="detail-content" id="detail-content" hidden>
+            <p class="detail-sender" id="detail-sender"></p>
+            <p class="detail-body" id="detail-body"></p>
+        </div>
+    </main>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    // Tracks the id (string) of the currently selected message across HTMX refreshes.
+    var selectedId = null;
+
+    var list = document.getElementById('msg-list');
+    var detailContent = document.getElementById('detail-content');
+    var detailPlaceholder = document.getElementById('detail-placeholder');
+    var detailSender = document.getElementById('detail-sender');
+    var detailBody = document.getElementById('detail-body');
+
+    function selectMessage(id, body, sender) {
+        selectedId = id;
+
+        // XSS-safe: textContent never interprets HTML.
+        detailBody.textContent = body;
+        detailSender.textContent = sender || '';
+        detailSender.hidden = !sender;
+
+        detailPlaceholder.hidden = true;
+        detailContent.hidden = false;
+
+        // Update visual selection state.
+        list.querySelectorAll('.msg-item').forEach(function (el) {
+            el.classList.toggle('selected', el.dataset.msgId === id);
+        });
+    }
+
+    function getItems() {
+        return Array.from(list.querySelectorAll('.msg-item'));
+    }
+
+    // Event delegation — one listener on the container so re-rendered items still work.
+    list.addEventListener('click', function (e) {
+        var item = e.target.closest('.msg-item');
+        if (!item) return;
+        selectMessage(item.dataset.msgId, item.dataset.msgBody, item.dataset.msgSender);
+    });
+
+    // After every HTMX swap: re-apply selected state to the new DOM nodes.
+    list.addEventListener('htmx:afterSwap', function () {
+        if (!selectedId) return;
+        var items = getItems();
+        var match = items.find(function (el) { return el.dataset.msgId === selectedId; });
+        if (match) {
+            match.classList.add('selected');
+            // Keep detail panel as-is — message content has not changed.
+        }
+    });
+
+    // Keyboard navigation: ArrowUp / ArrowDown.
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+
+        var items = getItems();
+        if (items.length === 0) return;
+
+        e.preventDefault();
+
+        var currentIndex = selectedId
+            ? items.findIndex(function (el) { return el.dataset.msgId === selectedId; })
+            : -1;
+
+        var nextIndex;
+        if (e.key === 'ArrowDown') {
+            // At the last item: stay put (boundary).
+            nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : currentIndex;
+            // Nothing selected yet: select the first item.
+            if (currentIndex === -1) nextIndex = 0;
+        } else {
+            // ArrowUp: at the first item (or nothing selected): stay put.
+            nextIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+            if (currentIndex === -1) nextIndex = 0;
+        }
+
+        var target = items[nextIndex];
+        if (target) {
+            selectMessage(target.dataset.msgId, target.dataset.msgBody, target.dataset.msgSender);
+        }
+    });
+}());
+</script>
+}
+
+<style>
+    .inbox-layout {
+        display: flex;
+        height: calc(100dvh - 4rem); /* subtract header/footer from _Layout */
+        gap: 0;
+        overflow: hidden;
+    }
+
+    /* ── Left panel ─────────────────────────────────────────────────────── */
+    .msg-list-panel {
+        width: 320px;
+        min-width: 220px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1.5px solid #d0d0d0;
+        background: #fafafa;
+        overflow: hidden;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem 0.75rem;
+        border-bottom: 1.5px solid #e0e0e0;
+        flex-shrink: 0;
+    }
+
+    .panel-header h1 {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .msg-count {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        background: #4f6ef7;
+        color: #fff;
+        border-radius: 999px;
+        padding: 0.1875rem 0.625rem;
+        min-width: 1.5rem;
+        text-align: center;
+    }
+
+    #msg-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+    }
+
+    .empty-state {
+        padding: 1.5rem 1.25rem;
+        color: #666;
+        font-size: 0.9375rem;
+    }
+
+    .msg-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        border-bottom: 1px solid #ebebeb;
+        font-family: inherit;
+        color: inherit;
+        transition: background 0.1s;
+    }
+
+    .msg-item:hover {
+        background: #f0f0f0;
+    }
+
+    .msg-item.selected {
+        background: #e8edff;
+        border-left: 3px solid #4f6ef7;
+        padding-left: calc(1.25rem - 3px);
+    }
+
+    .msg-sender {
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #4f6ef7;
+        margin-bottom: 0.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .msg-preview {
+        display: block;
+        font-size: 0.9375rem;
+        color: #1a1a1a;
+        line-height: 1.4;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ── Right panel (projector-friendly) ───────────────────────────────── */
+    .msg-detail-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 3rem 4rem;
+        background: #111;
+        color: #f5f5f5;
+        overflow-y: auto;
+    }
+
+    .detail-placeholder p {
+        font-size: 1.5rem;
+        color: #666;
+        text-align: center;
+    }
+
+    .detail-content {
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .detail-sender {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #7c9cff;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 1.25rem;
+    }
+
+    .detail-body {
+        font-size: 2.25rem;
+        line-height: 1.45;
+        font-weight: 500;
+        color: #f5f5f5;
+        /* Preserve newlines safely — never use innerHTML + <br> construction */
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    /* ── Responsive: stack on narrow screens ───────────────────────────── */
+    @@media (max-width: 640px) {
+        .inbox-layout {
+            flex-direction: column;
+            height: auto;
+        }
+
+        .msg-list-panel {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1.5px solid #d0d0d0;
+            max-height: 40dvh;
+        }
+
+        .msg-detail-panel {
+            padding: 2rem 1.5rem;
+            min-height: 50dvh;
+        }
+
+        .detail-body {
+            font-size: 2rem;
+        }
+    }
+</style>

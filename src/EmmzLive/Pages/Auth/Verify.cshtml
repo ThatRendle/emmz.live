@@ -1,0 +1,18 @@
+@page
+@model EmmzLive.Pages.Auth.VerifyModel
+@{
+    ViewData["Title"] = "Sign In Error";
+}
+
+<h1>Sign In Failed</h1>
+
+@if (Model.IsExpired)
+{
+    <p>This sign-in link has expired. Links are valid for 15 minutes.</p>
+    <p><a href="/auth/request">Request a new sign-in link</a></p>
+}
+else
+{
+    <p>This sign-in link is invalid.</p>
+    <p><a href="/auth/request">Request a new sign-in link</a></p>
+}
