@@ -13,12 +13,12 @@ namespace EmmzLive.Pages;
 public sealed class SubmitModel(AppDbContext db) : PageModel
 {
     [BindProperty]
-    [MaxLength(100)]
+    [MaxLength(64)]
     public string? SenderName { get; set; }
 
     [BindProperty]
     [Required(ErrorMessage = "A message is required.")]
-    [MaxLength(5000)]
+    [MaxLength(512)]
     public string Body { get; set; } = string.Empty;
 
     public string QrCodeBase64 { get; private set; } = string.Empty;
