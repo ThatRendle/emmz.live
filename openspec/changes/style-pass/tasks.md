@@ -28,4 +28,4 @@
 
 - [x] 5.1 `dotnet build` clean (0 warnings, `TreatWarningsAsErrors`); `dotnet test` green (all 106 existing tests); `dotnet format --verify-no-changes` clean.
 - [x] 5.2 `openspec validate style-pass --strict` passes.
-- [ ] 5.3 Manual (HITL) visual pass: every page renders in Outfit with the violet/teal brand; submission page rebranded but structurally unchanged; auth Request/Verify, Index, Error look cohesive; inbox is full-bleed/chrome-free, dark violet/teal, legible at projector distance with the selected message clearly highlighted; an HTML/script message body renders as inert text in list and detail.
+- [x] 5.3 Manual (HITL) visual pass: every page renders in Outfit with the violet/teal brand; submission page rebranded but structurally unchanged; auth Request/Verify, Index, Error look cohesive; inbox is full-bleed/chrome-free, dark violet/teal, legible at projector distance with the selected message clearly highlighted; an HTML/script message body renders as inert text in list and detail.
