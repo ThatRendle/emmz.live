@@ -153,6 +153,18 @@
             height: auto;
             border-radius: var(--radius-sm);
         }
+
+        .char-counter {
+            display: block;
+            text-align: right;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        .char-counter.at-limit {
+            color: var(--error);
+        }
     </style>
 </head>
 <body>
@@ -181,18 +193,20 @@
                        id="SenderName"
                        name="SenderName"
                        value="@Model.SenderName"
-                       maxlength="100"
+                       maxlength="64"
                        autocomplete="name"
                        placeholder="Your name (or leave blank to stay anonymous)" />
                 <span asp-validation-for="SenderName" class="validation-message"></span>
+                <span id="SenderName-counter" class="char-counter" aria-live="polite">[@((Model.SenderName ?? string.Empty).Length)/64]</span>
             </div>
             <div class="field">
                 <label for="Body">Message</label>
                 <textarea id="Body"
                           name="Body"
-                          maxlength="5000"
+                          maxlength="512"
                           placeholder="Type your message here…">@Model.Body</textarea>
                 <span asp-validation-for="Body" class="validation-message"></span>
+                <span id="Body-counter" class="char-counter" aria-live="polite">[@(Model.Body.Length)/512]</span>
             </div>
             <button type="submit">Send</button>
         </form>
@@ -208,5 +222,30 @@
             </div>
         }
     </div>
+    <script>
+        (function () {
+            var fields = [
+                { fieldId: 'SenderName', counterId: 'SenderName-counter' },
+                { fieldId: 'Body',       counterId: 'Body-counter' }
+            ];
+            fields.forEach(function (cfg) {
+                var field   = document.getElementById(cfg.fieldId);
+                var counter = document.getElementById(cfg.counterId);
+                if (!field || !counter) return;
+                function update() {
+                    var n   = field.value.length;
+                    var max = field.maxLength;
+                    counter.textContent = '[' + n + '/' + max + ']';
+                    if (n >= max) {
+                        counter.classList.add('at-limit');
+                    } else {
+                        counter.classList.remove('at-limit');
+                    }
+                }
+                field.addEventListener('input', update);
+                update();
+            });
+        }());
+    </script>
 </body>
 </html>

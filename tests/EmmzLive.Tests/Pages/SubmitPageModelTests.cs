@@ -168,6 +168,97 @@ public sealed class SubmitPageModelTests : IDisposable
     }
 
     // -------------------------------------------------------------------------
+    // Field length limits
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void SenderName_AtLimit_PassesMaxLengthAnnotation()
+    {
+        var model = CreateModel(_db);
+        var results = new List<ValidationResult>();
+        var ctx = new ValidationContext(model) { MemberName = nameof(SubmitModel.SenderName) };
+        var name64 = new string('a', 64);
+
+        var isValid = Validator.TryValidateProperty(name64, ctx, results);
+
+        Assert.True(isValid);
+        Assert.Empty(results);
+    }
+
+    [Fact]
+    public void SenderName_OverLimit_FailsMaxLengthAnnotation()
+    {
+        var model = CreateModel(_db);
+        var results = new List<ValidationResult>();
+        var ctx = new ValidationContext(model) { MemberName = nameof(SubmitModel.SenderName) };
+        var name65 = new string('a', 65);
+
+        var isValid = Validator.TryValidateProperty(name65, ctx, results);
+
+        Assert.False(isValid);
+        Assert.NotEmpty(results);
+    }
+
+    [Fact]
+    public async Task OnPostAsync_NameOverLimit_ModelStateInvalid_NoMessageSaved()
+    {
+        var model = CreateModel(_db);
+        model.Body = "Hello!";
+        model.SenderName = new string('a', 65);
+        model.ModelState.AddModelError(nameof(model.SenderName), "The field SenderName must be a string with a maximum length of 64.");
+
+        var result = await model.OnPostAsync();
+
+        Assert.IsType<PageResult>(result);
+        Assert.False(model.Submitted);
+        Assert.False(model.ModelState.IsValid);
+        Assert.Equal(0, await _db.Messages.CountAsync());
+    }
+
+    [Fact]
+    public void Body_AtLimit_PassesMaxLengthAnnotation()
+    {
+        var model = CreateModel(_db);
+        var results = new List<ValidationResult>();
+        var ctx = new ValidationContext(model) { MemberName = nameof(SubmitModel.Body) };
+        var body512 = new string('x', 512);
+
+        var isValid = Validator.TryValidateProperty(body512, ctx, results);
+
+        Assert.True(isValid);
+        Assert.Empty(results);
+    }
+
+    [Fact]
+    public void Body_OverLimit_FailsMaxLengthAnnotation()
+    {
+        var model = CreateModel(_db);
+        var results = new List<ValidationResult>();
+        var ctx = new ValidationContext(model) { MemberName = nameof(SubmitModel.Body) };
+        var body513 = new string('x', 513);
+
+        var isValid = Validator.TryValidateProperty(body513, ctx, results);
+
+        Assert.False(isValid);
+        Assert.NotEmpty(results);
+    }
+
+    [Fact]
+    public async Task OnPostAsync_BodyOverLimit_ModelStateInvalid_NoMessageSaved()
+    {
+        var model = CreateModel(_db);
+        model.Body = new string('x', 513);
+        model.ModelState.AddModelError(nameof(model.Body), "The field Body must be a string with a maximum length of 512.");
+
+        var result = await model.OnPostAsync();
+
+        Assert.IsType<PageResult>(result);
+        Assert.False(model.Submitted);
+        Assert.False(model.ModelState.IsValid);
+        Assert.Equal(0, await _db.Messages.CountAsync());
+    }
+
+    // -------------------------------------------------------------------------
     // Get-or-create: first call creates, second call reuses
     // -------------------------------------------------------------------------
 
