@@ -1,31 +1,231 @@
-html {
-  font-size: 14px;
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+:root {
+    --font: "Outfit", system-ui, -apple-system, sans-serif;
+
+    /* Light palette */
+    --bg:             #f7f5fc;
+    --surface:        #ffffff;
+    --text:           #1d1b2e;
+    --muted:          #6b6880;
+    --border:         #e4e0ee;
+    --primary:        #7c3aed;
+    --primary-hover:  #6d28d9;
+    --accent:         #14b8a6;
+    --error:          #dc2626;
+    --shadow:         0 2px 10px rgba(29, 27, 46, .08);
+
+    /* Dark projector tokens (used in projector view) */
+    --proj-bg:    #17132a;
+    --proj-panel: #1f1838;
+    --proj-text:  #f4f1fb;
+
+    /* Spacing & radius */
+    --radius-sm: 0.375rem;
+    --radius:    0.625rem;
+    --radius-lg: 0.875rem;
+    --space-1:   0.25rem;
+    --space-2:   0.5rem;
+    --space-3:   0.75rem;
+    --space-4:   1rem;
+    --space-5:   1.5rem;
+    --space-6:   2rem;
 }
 
-@media (min-width: 768px) {
-  html {
+/* ── Base reset ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
     font-size: 16px;
-  }
+    -webkit-text-size-adjust: 100%;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* ── Body ───────────────────────────────────────────────────────────────── */
 body {
-  margin-bottom: 60px;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* ── Headings ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1.375rem; }
+h3 { font-size: 1.125rem; }
+
+/* ── Links ──────────────────────────────────────────────────────────────── */
+a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+button,
+input[type="submit"],
+input[type="button"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background: var(--primary-hover);
+}
+
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ── Form controls ──────────────────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+    display: block;
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    font-family: var(--font);
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    appearance: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+input[type="text"]:focus-visible,
+input[type="email"]:focus-visible,
+input[type="password"]:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 0;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 8rem;
+}
+
+label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+    color: var(--text);
+}
+
+/* ── Validation messages ────────────────────────────────────────────────── */
+.validation-message,
+.field-validation-error,
+span[data-valmsg-for] {
+    display: block;
+    margin-top: var(--space-1);
+    font-size: 0.8125rem;
+    color: var(--error);
+}
+
+/* ── Card ───────────────────────────────────────────────────────────────── */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: var(--space-6) var(--space-5);
+}
+
+/* ── Layout wrappers ────────────────────────────────────────────────────── */
+main {
+    flex: 1;
+    padding: var(--space-6) var(--space-4);
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* ── Header / nav ───────────────────────────────────────────────────────── */
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+header nav {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-4);
+    height: 3.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header nav a {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+}
+
+header nav a:hover {
+    color: var(--primary-hover);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+footer {
+    padding: var(--space-4);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    background: var(--surface);
 }
