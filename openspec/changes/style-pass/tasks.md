@@ -6,11 +6,11 @@
 
 ## 2. Owner-facing pages
 
-- [ ] 2.1 Style `Pages/Auth/Request.cshtml` as a centered `.card` using the shared system: styled heading, submit button, and the confirmation / send-failure messages.
-- [ ] 2.2 Style `Pages/Auth/Verify.cshtml` (invalid/expired states) as a centered `.card` with a styled "request a new sign-in link" action.
-- [ ] 2.3 Style `Pages/Index.cshtml` (landing) consistently with the design system — no raw-HTML appearance.
-- [ ] 2.4 Style `Pages/Error.cshtml` using the design system.
-- [ ] 2.5 Bring `Pages/Submit.cshtml` into the brand: swap its inline palette (`#4f6ef7`, `#f5f5f5`, `#1a1a1a`, system-ui) for the shared tokens/Outfit (use `var(--…)`), keeping its existing structure, fields, QR placement, and behaviour. Ensure it still works as a self-contained page (it may consume the shared tokens by linking `site.css` or by referencing the same hex values; keep it cohesive with the rest).
+- [x] 2.1 Style `Pages/Auth/Request.cshtml` as a centered `.card` using the shared system: styled heading, submit button, and the confirmation / send-failure messages.
+- [x] 2.2 Style `Pages/Auth/Verify.cshtml` (invalid/expired states) as a centered `.card` with a styled "request a new sign-in link" action.
+- [x] 2.3 Style `Pages/Index.cshtml` (landing) consistently with the design system — no raw-HTML appearance.
+- [x] 2.4 Style `Pages/Error.cshtml` using the design system.
+- [x] 2.5 Bring `Pages/Submit.cshtml` into the brand: swap its inline palette (`#4f6ef7`, `#f5f5f5`, `#1a1a1a`, system-ui) for the shared tokens/Outfit (use `var(--…)`), keeping its existing structure, fields, QR placement, and behaviour. Ensure it still works as a self-contained page (it may consume the shared tokens by linking `site.css` or by referencing the same hex values; keep it cohesive with the rest).
 
 ## 3. Full-bleed projector inbox
 

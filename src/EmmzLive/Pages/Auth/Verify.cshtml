@@ -4,15 +4,37 @@
     ViewData["Title"] = "Sign In Error";
 }
 
-<h1>Sign In Failed</h1>
+@section Styles {
+<style>
+    .center-page .card {
+        max-width: 400px;
+    }
+    .center-page h1 {
+        margin-bottom: var(--space-4);
+    }
+    .center-page p {
+        color: var(--muted);
+        margin-bottom: var(--space-3);
+    }
+    .center-page p:last-child {
+        margin-bottom: 0;
+    }
+</style>
+}
 
-@if (Model.IsExpired)
-{
-    <p>This sign-in link has expired. Links are valid for 15 minutes.</p>
-    <p><a href="/auth/request">Request a new sign-in link</a></p>
-}
-else
-{
-    <p>This sign-in link is invalid.</p>
-    <p><a href="/auth/request">Request a new sign-in link</a></p>
-}
+<div class="center-page">
+    <div class="card">
+        <h1>Sign In Failed</h1>
+
+        @if (Model.IsExpired)
+        {
+            <p>This sign-in link has expired. Links are valid for 15 minutes.</p>
+            <p><a href="/auth/request">Request a new sign-in link</a></p>
+        }
+        else
+        {
+            <p>This sign-in link is invalid.</p>
+            <p><a href="/auth/request">Request a new sign-in link</a></p>
+        }
+    </div>
+</div>

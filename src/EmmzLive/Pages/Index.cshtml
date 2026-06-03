@@ -1,8 +1,26 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<h1>emmz.live</h1>
-<p>Anonymous message inbox for conference talks.</p>
+@section Styles {
+<style>
+    .center-page .card {
+        max-width: 480px;
+    }
+    .center-page h1 {
+        margin-bottom: var(--space-3);
+    }
+    .center-page p {
+        color: var(--muted);
+    }
+</style>
+}
+
+<div class="center-page">
+    <div class="card">
+        <h1>emmz.live</h1>
+        <p>Anonymous message inbox for conference talks.</p>
+    </div>
+</div>
