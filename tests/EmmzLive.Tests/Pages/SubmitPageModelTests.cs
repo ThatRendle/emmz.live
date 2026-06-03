@@ -70,6 +70,9 @@ public sealed class SubmitPageModelTests : IDisposable
         var msg = await _db.Messages.SingleAsync();
         Assert.Equal("Great talk!", msg.Body);
         Assert.Equal("Alice", msg.SenderName);
+
+        // Confirmation reflects the name it was sent under (captured before fields are cleared).
+        Assert.Equal("Alice", model.SubmittedSenderName);
     }
 
     [Fact]
@@ -105,6 +108,9 @@ public sealed class SubmitPageModelTests : IDisposable
 
         var msg = await _db.Messages.SingleAsync();
         Assert.Null(msg.SenderName);
+
+        // Anonymous submission → confirmation shows the anonymous wording.
+        Assert.Null(model.SubmittedSenderName);
     }
 
     // -------------------------------------------------------------------------

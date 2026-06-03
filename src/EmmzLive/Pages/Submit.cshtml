@@ -162,7 +162,14 @@
         @if (Model.Submitted)
         {
             <div class="confirmation" role="status">
-                Your message was sent anonymously. Thank you!
+                @if (string.IsNullOrEmpty(Model.SubmittedSenderName))
+                {
+                    <text>Your message was sent anonymously. Thank you!</text>
+                }
+                else
+                {
+                    <text>Your message was sent as @Model.SubmittedSenderName. Thank you!</text>
+                }
             </div>
         }
 
@@ -187,7 +194,7 @@
                           placeholder="Type your message here…">@Model.Body</textarea>
                 <span asp-validation-for="Body" class="validation-message"></span>
             </div>
-            <button type="submit">Send anonymously</button>
+            <button type="submit">Send</button>
         </form>
 
         @if (!string.IsNullOrEmpty(Model.QrCodeBase64))

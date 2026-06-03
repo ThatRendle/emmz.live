@@ -25,6 +25,13 @@ public sealed class SubmitModel(AppDbContext db) : PageModel
 
     public bool Submitted { get; private set; }
 
+    /// <summary>
+    /// The name the just-submitted message was sent under, or <c>null</c> if it was sent
+    /// anonymously. Captured before the form fields are cleared so the confirmation can
+    /// reflect whether a name was given.
+    /// </summary>
+    public string? SubmittedSenderName { get; private set; }
+
     public async Task<IActionResult> OnGetAsync()
     {
         var slug = GetCanonicalSlug();
@@ -57,6 +64,7 @@ public sealed class SubmitModel(AppDbContext db) : PageModel
         await db.SaveChangesAsync();
 
         Submitted = true;
+        SubmittedSenderName = message.SenderName;
 
         // Clear form fields after successful submission.
         SenderName = null;
