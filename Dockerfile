@@ -10,6 +10,10 @@ RUN dotnet publish src/EmmzLive/EmmzLive.csproj -c Release -o /app/publish --no-
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
+
 # Port binding is controlled at runtime by the PORT env var (defaulting to 8080) via UseUrls in
 # Program.cs. EXPOSE is documentation only; Railway injects $PORT automatically.
 EXPOSE 8080

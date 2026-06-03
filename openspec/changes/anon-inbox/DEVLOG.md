@@ -84,11 +84,18 @@ decisions made under uncertainty, deviations, and human-in-the-loop verification
   - **Bug found during verification:** `docker-compose.yml` omitted `MAIL_FROM` (a section-5 fail-fast
     var) → the app container would exit on `docker-compose up`. Fixed (added `MAIL_FROM=${MAIL_FROM}`);
     all six startup-required vars now wired in compose.
-  - **7.1 status:** `docker build` succeeds (worker-verified). Full `docker-compose up` end-to-end
-    could NOT be run by the orchestrator — this sandbox blocks Docker registry image pulls
-    (`postgres:17` pull canceled by the credential helper). 7.1 left **unticked** pending the user
-    running `docker-compose up` on their machine and confirming the app boots/migrates/serves. See
-    the consolidated HITL section below.
+  - **7.1 status: DONE — user-verified.** User ran `docker-compose up` on their machine and confirmed
+    the app works **end-to-end** (boot, submit, magic-link email via Resend, auth redirect, inbox UX);
+    only minor styling issues remain (noted for follow-up, out of scope for this change). The
+    orchestrator could not run the full stack itself (sandbox blocks Docker registry pulls), so 7.1
+    rested on this HITL confirmation.
+  - **libgssapi fix (cosmetic):** startup logged Npgsql GSSAPI noise
+    (`Cannot load library libgssapi_krb5.so.2`) — Npgsql attempts Kerberos negotiation, the slim
+    `aspnet:10.0` (Debian trixie) runtime lacks the lib, logs, and falls back; app worked regardless.
+    Added `libgssapi-krb5-2` to the runtime stage to silence it. This is log hygiene, not a functional
+    fix — safe to drop later if trimming image size.
+  - **Follow-up (not part of this change):** user reported minor projector/page styling issues to
+    address separately.
 
 ## Consolidated human-in-the-loop verification (to run before archive)
 

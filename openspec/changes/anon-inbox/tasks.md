@@ -59,6 +59,6 @@
 
 ## 7. Deployment
 
-- [ ] 7.1 Verify `Dockerfile` builds and runs correctly locally with `docker-compose up`
+- [x] 7.1 Verify `Dockerfile` builds and runs correctly locally with `docker-compose up`
 - [x] 7.2 Create `railway.json` or `railway.toml` with build and start configuration
 - [x] 7.3 Document all required Railway env vars in `README.md`
