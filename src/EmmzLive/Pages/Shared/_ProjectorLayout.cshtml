@@ -11,17 +11,7 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header>
-        <nav>
-            <a asp-area="" asp-page="/Index">emmz.live</a>
-        </nav>
-    </header>
-    <main>
-        @RenderBody()
-    </main>
-    <footer>
-        &copy; @DateTime.UtcNow.Year emmz.live
-    </footer>
+    @RenderBody()
 
     <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"
             integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"

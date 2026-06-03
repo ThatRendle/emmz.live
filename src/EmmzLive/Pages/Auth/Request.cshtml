@@ -4,20 +4,59 @@
     ViewData["Title"] = "Sign In";
 }
 
-<h1>Sign In</h1>
-
-@if (Model.EmailSent)
-{
-    <p>A sign-in link has been sent. Check your email and click the link within 15 minutes.</p>
-}
-else
-{
-    @if (Model.SendFailed)
-    {
-        <p>Sorry, we couldn't send the sign-in link right now. Please try again.</p>
+@section Styles {
+<style>
+    .center-page .card {
+        max-width: 400px;
     }
-    <form method="post">
-        @Html.AntiForgeryToken()
-        <button type="submit">Send sign-in link</button>
-    </form>
+    .center-page h1 {
+        margin-bottom: var(--space-5);
+    }
+    .alert {
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius);
+        margin-bottom: var(--space-4);
+        font-size: 0.9375rem;
+    }
+    .alert-success {
+        background: #ecfdf5;
+        border: 1.5px solid #6ee7b7;
+        color: #065f46;
+    }
+    .alert-error {
+        background: #fef2f2;
+        border: 1.5px solid #fca5a5;
+        color: #991b1b;
+    }
+    .card form button[type="submit"] {
+        width: 100%;
+        margin-top: var(--space-4);
+    }
+</style>
 }
+
+<div class="center-page">
+    <div class="card">
+        <h1>Sign In</h1>
+
+        @if (Model.EmailSent)
+        {
+            <div class="alert alert-success" role="status">
+                A sign-in link has been sent. Check your email and click the link within 15 minutes.
+            </div>
+        }
+        else
+        {
+            @if (Model.SendFailed)
+            {
+                <div class="alert alert-error" role="alert">
+                    Sorry, we couldn't send the sign-in link right now. Please try again.
+                </div>
+            }
+            <form method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit">Send sign-in link</button>
+            </form>
+        }
+    </div>
+</div>

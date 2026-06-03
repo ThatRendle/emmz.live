@@ -10,13 +10,35 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" />
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        /* Mirrors the brand tokens in site.css — Layout=null means site.css is not loaded.
+           Update both when changing the palette. */
+        :root {
+            --font:          "Outfit", system-ui, -apple-system, sans-serif;
+            --bg:            #f7f5fc;
+            --surface:       #ffffff;
+            --text:          #1d1b2e;
+            --muted:         #6b6880;
+            --border:        #e4e0ee;
+            --primary:       #7c3aed;
+            --primary-hover: #6d28d9;
+            --accent:        #14b8a6;
+            --error:         #dc2626;
+            --shadow:        0 2px 10px rgba(29, 27, 46, .08);
+            --radius-sm:     0.375rem;
+            --radius:        0.625rem;
+            --radius-lg:     0.875rem;
+        }
+
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #f5f5f5;
-            color: #1a1a1a;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100dvh;
             display: flex;
             flex-direction: column;
@@ -25,9 +47,10 @@
         }
 
         .card {
-            background: #fff;
-            border-radius: 0.75rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
             padding: 2rem 1.5rem;
             width: 100%;
             max-width: 480px;
@@ -50,7 +73,7 @@
 
         label .optional {
             font-weight: 400;
-            color: #666;
+            color: var(--muted);
         }
 
         input[type="text"],
@@ -58,26 +81,27 @@
             display: block;
             width: 100%;
             font-size: 1rem;
-            font-family: inherit;
+            font-family: var(--font);
             padding: 0.625rem 0.75rem;
-            border: 1.5px solid #d0d0d0;
-            border-radius: 0.5rem;
-            background: #fafafa;
-            color: inherit;
-            transition: border-color .15s;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text);
+            transition: border-color .15s, box-shadow .15s;
+            appearance: none;
         }
 
         input[type="text"]:focus,
         textarea:focus {
             outline: none;
-            border-color: #4f6ef7;
-            background: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
         }
 
         textarea { resize: vertical; min-height: 8rem; }
 
         .validation-message {
-            color: #c0392b;
+            color: var(--error);
             font-size: 0.8125rem;
             margin-top: 0.3rem;
         }
@@ -88,26 +112,29 @@
             padding: 0.75rem;
             font-size: 1rem;
             font-weight: 700;
-            font-family: inherit;
-            background: #4f6ef7;
+            font-family: var(--font);
+            background: var(--primary);
             color: #fff;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: var(--radius);
             cursor: pointer;
             transition: background .15s;
         }
 
-        button[type="submit"]:hover { background: #3a58d6; }
-        button[type="submit"]:active { background: #2d46c2; }
+        button[type="submit"]:hover { background: var(--primary-hover); }
+        button[type="submit"]:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
 
         .confirmation {
             margin-top: 1.25rem;
             padding: 0.875rem 1rem;
-            background: #eaf7ec;
-            border: 1.5px solid #6fcf97;
-            border-radius: 0.5rem;
+            background: #ecfdf5;
+            border: 1.5px solid #6ee7b7;
+            border-radius: var(--radius);
             font-weight: 600;
-            color: #1d6933;
+            color: #065f46;
         }
 
         .qr-section {
@@ -117,14 +144,14 @@
 
         .qr-section p {
             font-size: 0.8125rem;
-            color: #666;
+            color: var(--muted);
             margin-bottom: 0.75rem;
         }
 
         .qr-section img {
             max-width: 180px;
             height: auto;
-            border-radius: 0.375rem;
+            border-radius: var(--radius-sm);
         }
     </style>
 </head>
