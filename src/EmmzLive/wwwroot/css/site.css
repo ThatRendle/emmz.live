@@ -242,3 +242,182 @@ footer {
     border-top: 1px solid var(--border);
     background: var(--surface);
 }
+
+/* ── Projector inbox layout ─────────────────────────────────────────────── */
+/* All rules are scoped to .projector-page so they cannot bleed to other pages. */
+.projector-page {
+    background: var(--proj-bg);
+    color: var(--proj-text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.projector-page .inbox-layout {
+    display: flex;
+    height: 100dvh;
+    gap: 0;
+    overflow: hidden;
+}
+
+/* ── Left panel ─────────────────────────────────────────────────────────── */
+.projector-page .msg-list-panel {
+    width: 320px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1.5px solid rgba(244, 241, 251, 0.12);
+    background: var(--proj-panel);
+    overflow: hidden;
+}
+
+.projector-page .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem 0.75rem;
+    border-bottom: 1.5px solid rgba(244, 241, 251, 0.12);
+    flex-shrink: 0;
+}
+
+.projector-page .panel-header h1 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--proj-text);
+}
+
+.projector-page .msg-count {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.1875rem 0.625rem;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.projector-page #msg-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+}
+
+.projector-page .empty-state {
+    padding: 1.5rem 1.25rem;
+    color: rgba(244, 241, 251, 0.5);
+    font-size: 0.9375rem;
+}
+
+.projector-page .msg-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(244, 241, 251, 0.08);
+    font-family: inherit;
+    color: var(--proj-text);
+    transition: background 0.1s;
+}
+
+.projector-page .msg-item:hover {
+    background: rgba(124, 58, 237, 0.15);
+}
+
+.projector-page .msg-item.selected {
+    background: rgba(124, 58, 237, 0.25);
+    border-left: 3px solid var(--accent);
+    padding-left: calc(1.25rem - 3px);
+    box-shadow: inset 0 0 0 1px rgba(124, 58, 237, 0.4);
+}
+
+.projector-page .msg-sender {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.projector-page .msg-preview {
+    display: block;
+    font-size: 0.9375rem;
+    color: var(--proj-text);
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Right panel (projector-friendly) ───────────────────────────────────── */
+.projector-page .msg-detail-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 4rem;
+    background: var(--proj-bg);
+    color: var(--proj-text);
+    overflow-y: auto;
+}
+
+.projector-page .detail-placeholder p {
+    font-size: 1.5rem;
+    color: rgba(244, 241, 251, 0.4);
+    text-align: center;
+}
+
+.projector-page .detail-content {
+    width: 100%;
+    max-width: 900px;
+}
+
+.projector-page .detail-sender {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 1.25rem;
+}
+
+.projector-page .detail-body {
+    font-size: 2.25rem;
+    line-height: 1.45;
+    font-weight: 500;
+    color: var(--proj-text);
+    /* Preserve newlines safely — never use innerHTML + <br> construction */
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* ── Responsive: stack on narrow screens ───────────────────────────────── */
+@media (max-width: 640px) {
+    .projector-page .inbox-layout {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .projector-page .msg-list-panel {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1.5px solid rgba(244, 241, 251, 0.12);
+        max-height: 40dvh;
+    }
+
+    .projector-page .msg-detail-panel {
+        padding: 2rem 1.5rem;
+        min-height: 50dvh;
+    }
+
+    .projector-page .detail-body {
+        font-size: 2rem;
+    }
+}

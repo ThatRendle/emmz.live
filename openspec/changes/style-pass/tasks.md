@@ -14,10 +14,10 @@
 
 ## 3. Full-bleed projector inbox
 
-- [ ] 3.1 Create `Pages/Shared/_ProjectorLayout.cshtml`: a minimal HTML document (charset/viewport/title, the Outfit font links, shared stylesheet link, `Styles` section, `@RenderBody()`, the HTMX script, `Scripts` section) with NO site header/nav/footer.
-- [ ] 3.2 Set `Layout = "_ProjectorLayout"` on `Pages/Inbox.cshtml`, move its projector CSS out of the body `<style>` into the shared stylesheet (namespaced) and/or the page's `Styles` section, and apply the dark violet/teal projector tokens (`--proj-bg`/`--proj-panel`/`--proj-text`; selected message = violet glow + teal accent bar).
-- [ ] 3.3 Confirm the inbox now fills the viewport with no site chrome, and that the two-panel layout, ≥2rem high-contrast detail text, the message-count badge (incl. the OOB refresh), and the empty state all render correctly.
-- [ ] 3.4 Self-verify (and flag for HITL) that the unchanged inbox JS still works: click-to-detail via `textContent`, ArrowUp/ArrowDown boundary-clamped nav, 5s HTMX refresh, and selected-message preservation across refresh.
+- [x] 3.1 Create `Pages/Shared/_ProjectorLayout.cshtml`: a minimal HTML document (charset/viewport/title, the Outfit font links, shared stylesheet link, `Styles` section, `@RenderBody()`, the HTMX script, `Scripts` section) with NO site header/nav/footer.
+- [x] 3.2 Set `Layout = "_ProjectorLayout"` on `Pages/Inbox.cshtml`, move its projector CSS out of the body `<style>` into the shared stylesheet (namespaced) and/or the page's `Styles` section, and apply the dark violet/teal projector tokens (`--proj-bg`/`--proj-panel`/`--proj-text`; selected message = violet glow + teal accent bar).
+- [x] 3.3 Confirm the inbox now fills the viewport with no site chrome, and that the two-panel layout, ≥2rem high-contrast detail text, the message-count badge (incl. the OOB refresh), and the empty state all render correctly.
+- [x] 3.4 Self-verify (and flag for HITL) that the unchanged inbox JS still works: click-to-detail via `textContent`, ArrowUp/ArrowDown boundary-clamped nav, 5s HTMX refresh, and selected-message preservation across refresh.
 
 ## 4. Remove scaffold remnants
 
