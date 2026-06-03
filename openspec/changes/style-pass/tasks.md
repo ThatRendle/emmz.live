@@ -21,8 +21,8 @@
 
 ## 4. Remove scaffold remnants
 
-- [ ] 4.1 Delete `Pages/Privacy.cshtml` and `Pages/Privacy.cshtml.cs`; remove any link/reference to `/Privacy` (e.g. in `_Layout`).
-- [ ] 4.2 Grep the project for leftover Bootstrap/scaffold class names and dead CSS and remove them; confirm `wwwroot/css/site.css` contains only used rules.
+- [x] 4.1 Delete `Pages/Privacy.cshtml` and `Pages/Privacy.cshtml.cs`; remove any link/reference to `/Privacy` (e.g. in `_Layout`).
+- [x] 4.2 Grep the project for leftover Bootstrap/scaffold class names and dead CSS and remove them; confirm `wwwroot/css/site.css` contains only used rules.
 
 ## 5. Verification
 
