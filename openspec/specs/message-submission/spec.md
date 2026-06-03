@@ -3,9 +3,7 @@
 ## Purpose
 
 Defines the public, unauthenticated submission page where audience members send anonymous messages: a mobile-friendly form with an optional name and a required message, an inline QR code encoding the page's own URL, validation of empty messages, and an in-place confirmation after a successful submission.
-
 ## Requirements
-
 ### Requirement: Public submission page is accessible without authentication
 The system SHALL serve the submission page at `/{conf}/{talk}` to any visitor without requiring authentication.
 
@@ -14,7 +12,7 @@ The system SHALL serve the submission page at `/{conf}/{talk}` to any visitor wi
 - **THEN** the system SHALL return HTTP 200 with the submission form
 
 ### Requirement: Submission form accepts an optional name and a required message
-The system SHALL present a form with two fields: an optional "Name" text input and a required "Message" textarea.
+The system SHALL present a form with two fields: an optional "Name" text input limited to a maximum of 64 characters and a required "Message" textarea limited to a maximum of 512 characters. The system SHALL enforce these limits both in the browser (so input cannot exceed the maximum) and on the server (so an over-length submission is rejected).
 
 #### Scenario: Visitor submits with name
 - **WHEN** a visitor enters a name and a message and submits the form
@@ -27,6 +25,22 @@ The system SHALL present a form with two fields: an optional "Name" text input a
 #### Scenario: Visitor submits empty message
 - **WHEN** a visitor submits the form with an empty message body
 - **THEN** the system SHALL reject the submission and display a validation error
+
+#### Scenario: Name within limit is accepted
+- **WHEN** a visitor submits a name of 64 characters or fewer
+- **THEN** the system SHALL accept the name
+
+#### Scenario: Over-length name is rejected on the server
+- **WHEN** a submission reaches the server with a name longer than 64 characters
+- **THEN** the system SHALL reject the submission as invalid and not store the message
+
+#### Scenario: Message within limit is accepted
+- **WHEN** a visitor submits a message of 512 characters or fewer
+- **THEN** the system SHALL accept the message
+
+#### Scenario: Over-length message is rejected on the server
+- **WHEN** a submission reaches the server with a message body longer than 512 characters
+- **THEN** the system SHALL reject the submission as invalid and not store the message
 
 ### Requirement: Submission page displays a QR code of its own URL
 The system SHALL render a QR code image on the submission page that encodes the full URL of that page (scheme + host + path).
@@ -52,3 +66,19 @@ The system SHALL render the submission page with a clean, minimal aesthetic suit
 #### Scenario: Mobile-friendly rendering
 - **WHEN** the submission page is viewed on a mobile viewport
 - **THEN** the layout SHALL be usable without horizontal scrolling
+
+### Requirement: Each field shows a live character counter
+The system SHALL display a live character counter beneath each of the Name and Message fields, right-aligned, in the form `[n/max]` where `n` is the current character count and `max` is that field's maximum length (64 for Name, 512 for Message). The counter SHALL update as the visitor types and SHALL turn the error colour when the field has reached its maximum length.
+
+#### Scenario: Counter reflects current length
+- **WHEN** a visitor has typed 14 characters into the Name field
+- **THEN** the system SHALL display `[14/64]` beneath that field
+
+#### Scenario: Counter starts at zero
+- **WHEN** the submission page is first loaded with empty fields
+- **THEN** the Name counter SHALL read `[0/64]` and the Message counter SHALL read `[0/512]`
+
+#### Scenario: Counter signals the limit
+- **WHEN** a field has reached its maximum length
+- **THEN** the system SHALL render that field's counter in the error colour
+
